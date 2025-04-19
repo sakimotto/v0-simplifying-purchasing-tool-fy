@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zervi Sourcing App - Database Schema</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            margin: 0;
+            padding: 16px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        
+        /* Table styles */
+        .schema-container {
+            overflow-x: auto;
+            padding: 16px;
+        }
+        
+        .schema-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 24px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .schema-table th,
+        .schema-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .schema-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        
+        .schema-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table-title {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid #bae6fd;
+        }
+        
+        .primary-key {
+            color: #b91c1c;
+            font-weight: 600;
+        }
+        
+        .foreign-key {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        
+        /* Relationship diagram */
+        .relationship-diagram {
+            margin-top: 32px;
+            padding: 16px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .relationship-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .relationship-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                font-size: 12px;
+            }
+            
+            .schema-table {
+                box-shadow: none;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            
+            .relationship-diagram {
+                box-shadow: none;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            
+            h1 {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+            
+            h2 {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+            
+            .table-title {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Zervi Sourcing App - Database Schema</h1>
+    
+    <div class="schema-container">
+        <h2>Planned Database Schema</h2>
+        <p>This schema represents the planned database structure for the Zervi Sourcing App.</p>
+        
+        <!-- Items Table (NEW) -->
+        <div class="table-title">Items</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the item</td>
+                </tr>
+                <tr>
+                    <td>internal_sku</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL, UNIQUE</td>
+                    <td>Internal SKU/part number</td>
+                </tr>
+                <tr>
+                    <td>customer_sku</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Customer's SKU/part number</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>Item name</td>
+                </tr>
+                <tr>
+                    <td>category</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td>Product category (e.g., "Woven Labels", "Buttons")</td>
+                </tr>
+                <tr>
+                    <td>subcategory</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Product subcategory</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Detailed description of the item</td>
+                </tr>
+                <tr>
+                    <td>specifications</td>
+                    <td>JSONB</td>
+                    <td></td>
+                    <td>Technical specifications as JSON (size, material, color, etc.)</td>
+                </tr>
+                <tr>
+                    <td>unit_of_measure</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>Unit of measure (e.g., "pcs", "yards", "kg")</td>
+                </tr>
+                <tr>
+                    <td>min_order_quantity</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>Minimum order quantity</td>
+                </tr>
+                <tr>
+                    <td>target_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td></td>
+                    <td>Target price per unit</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>Item status (e.g., "active", "discontinued", "in-development")</td>
+                </tr>
+                <tr>
+                    <td>image_url</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>URL to item image</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Item_Suppliers Table (NEW) -->
+        <div class="table-title">Item_Suppliers (Junction Table)</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Items table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table</td>
+                </tr>
+                <tr>
+                    <td>supplier_part_number</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Supplier's part number for this item</td>
+                </tr>
+                <tr>
+                    <td>unit_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td></td>
+                    <td>Supplier's price per unit</td>
+                </tr>
+                <tr>
+                    <td>lead_time</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Lead time for this item from this supplier</td>
+                </tr>
+                <tr>
+                    <td>moq</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>Minimum order quantity from this supplier</td>
+                </tr>
+                <tr>
+                    <td>is_preferred</td>
+                    <td>BOOLEAN</td>
+                    <td>DEFAULT FALSE</td>
+                    <td>Whether this is the preferred supplier for this item</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Notes about this supplier for this item</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Suppliers Table -->
+        <div class="table-title">Suppliers</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the supplier</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>Supplier company name</td>
+                </tr>
+                <tr>
+                    <td>specialization</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>Main product categories or specialization</td>
+                </tr>
+                <tr>
+                    <td>location</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>Physical address of the supplier</td>
+                </tr>
+                <tr>
+                    <td>phone</td>
+                    <td>VARCHAR(50)</td>
+                    <td></td>
+                    <td>Contact phone number</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>Contact email address</td>
+                </tr>
+                <tr>
+                    <td>website</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>Supplier website URL</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Detailed description of the supplier</td>
+                </tr>
+                <tr>
+                    <td>min_order_quantity</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Minimum order quantity information</td>
+                </tr>
+                <tr>
+                    <td>lead_time</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Typical lead time for orders</td>
+                </tr>
+                <tr>
+                    <td>payment_terms</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>Payment terms information</td>
+                </tr>
+                <tr>
+                    <td>rating</td>
+                    <td>DECIMAL(2,1)</td>
+                    <td></td>
+                    <td>Supplier rating (0-5)</td>
+                </tr>
+                <tr>
+                    <td>image_url</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>URL to supplier logo or image</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Certifications Table -->
+        <div class="table-title">Certifications</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the certification</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td>Certification name (e.g., OEKO-TEX, ISO9001)</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Description of the certification</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Supplier_Certifications Table -->
+        <div class="table-title">Supplier_Certifications (Junction Table)</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">certification_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Certifications table</td>
+                </tr>
+                <tr>
+                    <td>expiry_date</td>
+                    <td>DATE</td>
+                    <td></td>
+                    <td>Expiration date of the certification</td>
+                </tr>
+                <tr>
+                    <td>verification_status</td>
+                    <td>VARCHAR(50)</td>
+                    <td></td>
+                    <td>Status of verification (e.g., verified, pending)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Orders Table (UPDATED) -->
+        <div class="table-title">Orders</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the order</td>
+                </tr>
+                <tr>
+                    <td>order_number</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL, UNIQUE</td>
+                    <td>Human-readable order number</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>Order status (draft, confirmed, production, shipped, delivered, completed)</td>
+                </tr>
+                <tr>
+                    <td>order_date</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td>Date the order was placed</td>
+                </tr>
+                <tr>
+                    <td>delivery_date</td>
+                    <td>DATE</td>
+                    <td></td>
+                    <td>Expected or actual delivery date</td>
+                </tr>
+                <tr>
+                    <td>shipping_terms</td>
+                    <td>VARCHAR(50)</td>
+                    <td></td>
+                    <td>Shipping terms (FOB, EXW, etc.)</td>
+                </tr>
+                <tr>
+                    <td>payment_terms</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Payment terms for this order</td>
+                </tr>
+                <tr>
+                    <td>currency</td>
+                    <td>VARCHAR(3)</td>
+                    <td>NOT NULL</td>
+                    <td>Currency code (USD, EUR, etc.)</td>
+                </tr>
+                <tr>
+                    <td>total_value</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL</td>
+                    <td>Total order value</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Additional notes about the order</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Order_Items Table (NEW) -->
+        <div class="table-title">Order_Items</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the order item</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">order_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Orders table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Items table</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>Quantity ordered</td>
+                </tr>
+                <tr>
+                    <td>unit_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL</td>
+                    <td>Price per unit</td>
+                </tr>
+                <tr>
+                    <td>total_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL</td>
+                    <td>Total price for this line item</td>
+                </tr>
+                <tr>
+                    <td>specifications</td>
+                    <td>JSONB</td>
+                    <td></td>
+                    <td>Specific requirements for this order item</td>
+                </tr>
+                <tr>
+                    <td>image_url</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>URL to product image for this order</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Notes specific to this order item</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Samples Table (UPDATED) -->
+        <div class="table-title">Samples</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the sample</td>
+                </tr>
+                <tr>
+                    <td>sample_id</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL, UNIQUE</td>
+                    <td>Human-readable sample ID</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Items table</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>Sample quantity</td>
+                </tr>
+                <tr>
+                    <td>details</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Detailed description of the sample</td>
+                </tr>
+                <tr>
+                    <td>specifications</td>
+                    <td>JSONB</td>
+                    <td></td>
+                    <td>Technical specifications for this sample</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>Sample status (requested, in-transit, received, approved, rejected)</td>
+                </tr>
+                <tr>
+                    <td>request_date</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td>Date the sample was requested</td>
+                </tr>
+                <tr>
+                    <td>received_date</td>
+                    <td>DATE</td>
+                    <td></td>
+                    <td>Date the sample was received</td>
+                </tr>
+                <tr>
+                    <td>image_url</td>
+                    <td>VARCHAR(255)</td>
+                    <td></td>
+                    <td>URL to sample image</td>
+                </tr>
+                <tr>
+                    <td>rejection_reason</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Reason for rejection if applicable</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- RFQs Table (UPDATED) -->
+        <div class="table-title">RFQs (Request for Quotes)</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the RFQ</td>
+                </tr>
+                <tr>
+                    <td>rfq_number</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL, UNIQUE</td>
+                    <td>Human-readable RFQ number</td>
+                </tr>
+                <tr>
+                    <td>title</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>RFQ title</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>General description of the RFQ</td>
+                </tr>
+                <tr>
+                    <td>delivery_date</td>
+                    <td>DATE</td>
+                    <td></td>
+                    <td>Required delivery date</td>
+                </tr>
+                <tr>
+                    <td>shipping_terms</td>
+                    <td>VARCHAR(50)</td>
+                    <td></td>
+                    <td>Shipping terms (FOB, EXW, etc.)</td>
+                </tr>
+                <tr>
+                    <td>additional_requirements</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Additional requirements or specifications</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>RFQ status (draft, sent, responded, closed)</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- RFQ_Items Table (NEW) -->
+        <div class="table-title">RFQ_Items</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the RFQ item</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">rfq_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to RFQs table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Items table</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>Requested quantity</td>
+                </tr>
+                <tr>
+                    <td>target_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td></td>
+                    <td>Target price per unit</td>
+                </tr>
+                <tr>
+                    <td>specifications</td>
+                    <td>JSONB</td>
+                    <td></td>
+                    <td>Specific requirements for this RFQ item</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Notes specific to this RFQ item</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- RFQ_Suppliers Table (UPDATED) -->
+        <div class="table-title">RFQ_Suppliers (Junction Table)</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">rfq_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to RFQs table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table</td>
+                </tr>
+                <tr>
+                    <td>response_status</td>
+                    <td>VARCHAR(50)</td>
+                    <td></td>
+                    <td>Status of supplier response (pending, received, accepted, rejected)</td>
+                </tr>
+                <tr>
+                    <td>response_date</td>
+                    <td>DATE</td>
+                    <td></td>
+                    <td>Date of supplier response</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Additional notes about the supplier response</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- RFQ_Supplier_Items Table (NEW) -->
+        <div class="table-title">RFQ_Supplier_Items</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">rfq_supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to RFQ_Suppliers table</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">rfq_item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to RFQ_Items table</td>
+                </tr>
+                <tr>
+                    <td>quoted_price</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td></td>
+                    <td>Price quoted by supplier for this item</td>
+                </tr>
+                <tr>
+                    <td>quoted_lead_time</td>
+                    <td>VARCHAR(100)</td>
+                    <td></td>
+                    <td>Lead time quoted by supplier for this item</td>
+                </tr>
+                <tr>
+                    <td>moq</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>Minimum order quantity quoted by supplier</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>Additional notes about the supplier's quote for this item</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Documents Table -->
+        <div class="table-title">Documents</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the document</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>Document name</td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>Document type (contract, invoice, specification, certificate)</td>
+                </tr>
+                <tr>
+                    <td>file_url</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>URL to the document file</td>
+                </tr>
+                <tr>
+                    <td>file_size</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>File size in bytes</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">supplier_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Suppliers table (if applicable)</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">order_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Orders table (if applicable)</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">sample_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Samples table (if applicable)</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">rfq_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to RFQs table (if applicable)</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">item_id</td>
+                    <td>UUID</td>
+                    <td>FOREIGN KEY</td>
+                    <td>Reference to Items table (if applicable)</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Users Table -->
+        <div class="table-title">Users</div>
+        <table class="schema-table">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Constraints</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>UUID</td>
+                    <td>PRIMARY KEY</td>
+                    <td>Unique identifier for the user</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>User's full name</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL, UNIQUE</td>
+                    <td>User's email address</td>
+                </tr>
+                <tr>
+                    <td>password_hash</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td>Hashed password</td>
+                </tr>
+                <tr>
+                    <td>role</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td>User role (admin, purchasing_manager, sourcing_specialist, etc.)</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT NOW()</td>
+                    <td>Record update timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Relationship Diagram -->
+        <div class="relationship-diagram">
+            <div class="relationship-title">Entity Relationship Overview</div>
+            
+            <div class="relationship-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #f0f9ff;"></div>
+                    <span>Primary Entities</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #f0fdf4;"></div>
+                    <span>Junction Tables</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #fffbeb;"></div>
+                    <span>Supporting Entities</span>
+                </div>
+            </div>
+            
+            <p>This database schema is designed to support the core functionality of the Zervi Sourcing App:</p>
+            
+            <ul>
+                <li><strong>Items</strong> are a central entity representing the products being sourced, with internal and customer SKUs.</li>
+                <li><strong>Suppliers</strong> are another central entity, with relationships to items, certifications, orders, samples, and RFQs.</li>
+                <li><strong>Junction tables</strong> (Item_Suppliers, Supplier_Certifications, RFQ_Suppliers, etc.) handle many-to-many relationships.</li>
+                <li><strong>Orders</strong> and <strong>Order_Items</strong> track purchases from suppliers.</li>
+                <li><strong>Samples</strong> track sample requests and approvals, linked to specific items.</li>
+                <li><strong>RFQs</strong>, <strong>RFQ_Items</strong>, and related tables manage the quote request process.</li>
+                <li><strong>Documents</strong> can be associated with suppliers, orders, samples, RFQs, or items.</li>
+                <li><strong>Users</strong> will have appropriate permissions to access and modify data based on their roles.</li>
+            </ul>
+            
+            <p>The schema is designed to be flexible and extensible as new features are added to the application.</p>
+        </div>
+    </div>
+</body>
+</html>

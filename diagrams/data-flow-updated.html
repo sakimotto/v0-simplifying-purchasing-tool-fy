@@ -1,0 +1,363 @@
+&lt;!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zervi Sourcing App - Updated Data Flow</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            margin: 0;
+            padding: 16px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        
+        /* Diagram styles */
+        .diagram-container {
+            overflow-x: auto;
+            padding: 16px;
+            min-height: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 16px;
+        }
+        
+        .diagram-node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            min-width: 120px;
+            min-height: 50px;
+            margin: 8px;
+        }
+        
+        .diagram-node.small {
+            padding: 6px;
+            min-width: 100px;
+            min-height: 30px;
+            font-size: 14px;
+        }
+        
+        /* Node type colors */
+        .node-item { background-color: #e0f2fe; border: 1px solid #7dd3fc; color: #0c4a6e; }
+        .node-input { background-color: #ecfeff; border: 1px solid #a5f3fc; color: #155e75; }
+        .node-output { background-color: #f0fdfa; border: 1px solid #99f6e4; color: #115e59; }
+        .node-component { background-color: #f5f3ff; border: 1px solid #ddd6fe; color: #5b21b6; }
+        .node-state { background-color: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+        .node-service { background-color: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        .node-backend { background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+        .node-database { background-color: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        
+        /* Arrow styles */
+        .arrow-container {
+            position: relative;
+            height: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .arrow-line {
+            position: absolute;
+            background-color: #d1d5db;
+        }
+        
+        .arrow-line.vertical {
+            width: 2px;
+            height: 100%;
+        }
+        
+        .arrow-line.horizontal {
+            height: 2px;
+            width: 100%;
+        }
+        
+        .arrow-head {
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+        
+        .arrow-head.down {
+            bottom: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #d1d5db;
+        }
+        
+        .arrow-head.up {
+            top: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #d1d5db;
+        }
+        
+        .arrow-head.right {
+            right: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid #d1d5db;
+        }
+        
+        .arrow-head.left {
+            left: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 6px solid #d1d5db;
+        }
+        
+        /* Layout helpers */
+        .flex {
+            display: flex;
+        }
+        
+        .flex-col {
+            flex-direction: column;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .grid {
+            display: grid;
+        }
+        
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        
+        .gap-2 {
+            gap: 8px;
+        }
+        
+        .gap-4 {
+            gap: 16px;
+        }
+        
+        .gap-8 {
+            gap: 32px;
+        }
+        
+        .mt-4 {
+            margin-top: 16px;
+        }
+        
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+        
+        .ml-4 {
+            margin-left: 16px;
+        }
+        
+        .mr-4 {
+            margin-right: 16px;
+        }
+        
+        .w-full {
+            width: 100%;
+        }
+        
+        .min-w-diagram {
+            min-width: 800px;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .diagram-container {
+                box-shadow: none;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            
+            h1 {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+            
+            h2 {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Zervi Sourcing App - Updated Data Flow</h1>
+    <p>This diagram shows the updated data flow including the Items entity, which is central to the purchasing workflow.</p>
+    
+    <div class="diagram-container">
+        <div class="min-w-diagram">
+            &lt;!-- Data Flow: Input to Database -->
+            <h2>Sample to Bulk Order Flow</h2>
+            <div class="flex justify-between items-center">
+                <div class="diagram-node node-input">User Input<br>(Sample Request)</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-item">Item Creation<br>(with SKUs)</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-component">Sample Request<br>Form</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-service">Sample API<br>Service</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-database">Database<br>(Samples)</div>
+            </div>
+            
+            &lt;!-- Sample Approval to Order Flow -->
+            <div class="flex justify-between items-center" style="margin-top: 60px;">
+                <div class="diagram-node node-component">Sample<br>Approval</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-item">Item Reference<br>(Internal/Customer SKU)</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-component">Order<br>Creation</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-service">Order API<br>Service</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-database">Database<br>(Orders)</div>
+            </div>
+            
+            &lt;!-- RFQ Flow -->
+            <h2 class="mt-4">RFQ Flow with Items</h2>
+            <div class="flex justify-between items-center">
+                <div class="diagram-node node-input">User Input<br>(RFQ Creation)</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-item">Item Selection<br>(Multiple Items)</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-component">RFQ Form<br>Submission</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-service">RFQ API<br>Service</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-database">Database<br>(RFQs & Items)</div>
+            </div>
+            
+            &lt;!-- Supplier Quote Response Flow -->
+            <div class="flex justify-between items-center" style="margin-top: 60px;">
+                <div class="diagram-node node-component">Supplier<br>Quote Response</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-item">Item Price<br>Updates</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-component">Quote<br>Comparison</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-service">Item/Supplier<br>API Service</div>
+                
+                <div style="width: 40px; position: relative;">
+                    <div class="arrow-line horizontal"></div>
+                    <div class="arrow-head right"></div>
+                </div>
+                
+                <div class="diagram-node node-database">Database<br>(Item_Suppliers)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
