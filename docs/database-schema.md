@@ -210,5 +210,5 @@ Stores information about different types of certifications.
 This database schema provides a solid foundation for the Zervi Sourcing App's data management needs. It captures all the essential entities and relationships required for supplier management, order tracking, sample management, RFQ processing, and document management. The addition of the Items entity ensures proper tracking of products with both internal and customer SKUs, which is critical for the purchasing workflow where samples lead to bulk orders.
 \`\`\`
 
-```html file="diagrams/architecture-diagram.html"
+\`\`\`html file="diagrams/architecture-diagram.html"
 ... This file was left out for brevity. Assume it is correct and does not need any modifications. ...
