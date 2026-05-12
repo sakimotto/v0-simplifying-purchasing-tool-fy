@@ -134,7 +134,7 @@ export default function CompareSuppliers() {
                       <td className="p-3 border-b font-medium">{category.name}</td>
                       {suppliers.map((supplier) => (
                         <td key={supplier.id} className="p-3 border-b text-center">
-                          {supplier[category.key]}
+                          {(supplier as Record<string, string>)[category.key]}
                         </td>
                       ))}
                     </tr>
