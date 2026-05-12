@@ -60,7 +60,7 @@ export default function TeamPage() {
     },
   ]
 
-  const getRoleBadge = (role: string) => {
+  const getRoleBadge = (role: string): "default" | "secondary" | "outline" | "destructive" => {
     switch (role) {
       case "Admin": return "default"
       case "Manager": return "secondary"
@@ -172,7 +172,7 @@ export default function TeamPage() {
                       <Badge variant="outline" className="text-xs">
                         {member.department}
                       </Badge>
-                      <Badge variant={getRoleBadge(member.role) as any} className="text-xs">
+                      <Badge variant={getRoleBadge(member.role)} className="text-xs">
                         {member.role}
                       </Badge>
                     </div>

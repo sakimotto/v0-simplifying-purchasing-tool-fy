@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/status-badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PageSummary } from "@/components/page-summary"
 
-export default function SampleDetailPage({ params }) {
+export default function SampleDetailPage({ params }: { params: { id: string } }) {
   // In a real app, we would fetch the sample data based on the ID
   const sampleId = params.id
 
