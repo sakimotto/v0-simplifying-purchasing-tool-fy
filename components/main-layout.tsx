@@ -43,7 +43,7 @@ export function MainLayout({ children }) {
           <SidebarHeader className="flex h-14 items-center border-b px-4">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Package className="h-6 w-6" />
-              <span>ProcureFlow</span>
+              <span>Zervi</span>
             </Link>
             <SidebarTrigger className="ml-auto md:hidden" />
           </SidebarHeader>

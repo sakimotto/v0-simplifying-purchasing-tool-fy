@@ -15,7 +15,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       normalizedStatus === "delivered" ||
       normalizedStatus === "completed"
     ) {
-      return { variant: "success", label: status }
+      return { variant: "default", label: status }
     }
 
     if (normalizedStatus === "pending" || normalizedStatus === "processing" || normalizedStatus === "in transit") {
@@ -27,7 +27,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     }
 
     if (normalizedStatus === "low stock") {
-      return { variant: "warning", label: status }
+      return { variant: "secondary", label: status }
     }
 
     if (normalizedStatus === "inactive") {
@@ -40,7 +40,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   const { variant, label } = getStatusProps(status)
 
   return (
-    <Badge variant={variant as any} className={className}>
+    <Badge variant={variant} className={className}>
       {label}
     </Badge>
   )

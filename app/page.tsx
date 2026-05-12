@@ -58,7 +58,7 @@ export default function SuppliersPage() {
 
           <Tabs defaultValue="all" className="w-full">
             <TabsList className="mb-4">
-              <TabsTrigger value="all">All Suppliers (20)</TabsTrigger>
+              <TabsTrigger value="all">All Suppliers (6)</TabsTrigger>
               <TabsTrigger value="favorites">Favorites</TabsTrigger>
               <TabsTrigger value="recent">Recently Viewed</TabsTrigger>
               <TabsTrigger value="contacted">Contacted</TabsTrigger>

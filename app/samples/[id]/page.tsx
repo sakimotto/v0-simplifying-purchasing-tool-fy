@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { StatusBadge } from "@/components/status-badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PageSummary } from "@/components/page-summary"
 
@@ -354,32 +355,5 @@ export default function SampleDetailPage({ params }) {
         </div>
       </div>
     </div>
-  )
-}
-
-function StatusBadge({ status }) {
-  const getStatusProps = (status) => {
-    switch (status) {
-      case "requested":
-        return { variant: "outline", label: "Requested" }
-      case "in-transit":
-        return { variant: "secondary", label: "In Transit" }
-      case "received":
-        return { variant: "default", label: "Received" }
-      case "approved":
-        return { variant: "success", label: "Approved" }
-      case "rejected":
-        return { variant: "destructive", label: "Rejected" }
-      default:
-        return { variant: "outline", label: status }
-    }
-  }
-
-  const { variant, label } = getStatusProps(status)
-
-  return (
-    <Badge variant={variant} className="flex items-center">
-      {label}
-    </Badge>
   )
 }
