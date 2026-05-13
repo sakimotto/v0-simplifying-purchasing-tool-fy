@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PageSummary } from "@/components/page-summary"
 
 export default function SampleDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
   // In a real app, we would fetch the sample data based on the ID
   const sampleId = params.id
 
@@ -335,8 +336,14 @@ export default function SampleDetailPage({ params }: { params: { id: string } })
                         </div>
 
                         <div className="flex gap-2 justify-end">
-                          <Button variant="outline">Reject Sample</Button>
-                          <Button>Approve Sample</Button>
+                          <Button variant="outline" onClick={async () => {
+                            await fetch("/api/samples/evaluate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sampleId: sample.id, action: "reject" }) })
+                            router.refresh()
+                          }}>Reject Sample</Button>
+                          <Button onClick={async () => {
+                            await fetch("/api/samples/evaluate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sampleId: sample.id, action: "approve" }) })
+                            router.refresh()
+                          }}>Approve Sample</Button>
                         </div>
                       </div>
                     </div>

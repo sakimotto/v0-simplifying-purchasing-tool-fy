@@ -1,5 +1,9 @@
-import { ArrowLeft, Calendar, CheckCircle, Clock, FileText, Send } from "lucide-react"
+"use client"
+
+import { ArrowLeft, Calendar, CheckCircle, Clock, FileText, Loader2, Send } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,6 +12,8 @@ import { StatusBadge } from "@/components/status-badge"
 import { PageSummary } from "@/components/page-summary"
 
 export default function RFQDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
+  const [converting, setConverting] = useState(false)
   const rfq = {
     id: params.id,
     supplier: "YKK Group",
@@ -38,12 +44,15 @@ export default function RFQDetailPage({ params }: { params: { id: string } }) {
             <h1 className="text-xl font-bold">RFQ #{rfq.id}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Link href={`/orders/create?rfq=${rfq.id}`}>
-              <Button size="sm">
-                <Send className="h-4 w-4 mr-2" />
-                Convert to Order
-              </Button>
-            </Link>
+            <Button size="sm" onClick={async () => {
+              setConverting(true)
+              const res = await fetch("/api/rfq/convert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ rfqId: rfq.id }) })
+              if (res.ok) { const order = await res.json(); router.push(`/orders/${order.id}`) }
+              setConverting(false)
+            }} disabled={converting}>
+              {converting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+              Convert to Order
+            </Button>
           </div>
         </div>
       </header>
