@@ -40,7 +40,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   const { variant, label } = getStatusProps(status)
 
   return (
-    <Badge variant={variant} className={className}>
+    <Badge variant={variant as "default" | "secondary" | "destructive" | "outline"} className={className}>
       {label}
     </Badge>
   )

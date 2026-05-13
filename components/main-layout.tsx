@@ -33,7 +33,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 
-export function MainLayout({ children }) {
+export function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (

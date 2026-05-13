@@ -99,7 +99,7 @@ export default function SuppliersPage() {
   )
 }
 
-function SupplierCard({ supplier }) {
+function SupplierCard({ supplier }: { supplier: any }) {
   return (
     <Card className="overflow-hidden h-full">
       <div className="relative h-40 bg-gray-100 flex items-center justify-center p-4 border-b">
@@ -126,7 +126,7 @@ function SupplierCard({ supplier }) {
         <p className="text-sm text-gray-600 mb-3">{supplier.specialization}</p>
 
         <div className="flex flex-wrap gap-1 mb-3">
-          {supplier.certifications.map((cert, i) => (
+          {supplier.certifications.map((cert: string, i: number) => (
             <Badge key={i} variant="outline" className="text-xs">
               {cert}
             </Badge>

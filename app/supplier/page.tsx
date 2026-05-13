@@ -290,7 +290,7 @@ export default function SupplierListPage() {
                               <Badge
                                 variant={
                                   supplier.status === "Active"
-                                    ? "success"
+                                    ? "default"
                                     : supplier.status === "Pending"
                                       ? "secondary"
                                       : "outline"
@@ -357,7 +357,7 @@ export default function SupplierListPage() {
                                     Verified
                                   </Badge>
                                 )}
-                                <Badge variant="success" className="flex items-center">
+                                <Badge variant="default" className="flex items-center">
                                   {supplier.status}
                                 </Badge>
                               </div>

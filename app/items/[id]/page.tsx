@@ -156,7 +156,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                     <div>
                       <p className="text-sm text-gray-500">Status</p>
                       <Badge
-                        variant={item.status === "Active" ? "success" : "secondary"}
+                        variant={item.status === "Active" ? "default" : "secondary"}
                         className="flex items-center mt-1"
                       >
                         {item.status}
