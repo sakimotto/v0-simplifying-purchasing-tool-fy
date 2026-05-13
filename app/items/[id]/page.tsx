@@ -1,4 +1,5 @@
 import { ArrowLeft, Box, Calendar, Clock, Edit, FileText, ShoppingCart } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -122,9 +123,11 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
                 <CardContent>
                   <div className="flex flex-col items-center mb-6">
                     <div className="w-40 h-40 bg-gray-100 rounded flex items-center justify-center mb-4">
-                      <img
+                      <Image
                         src="/metal-teeth-closure.png"
                         alt={item.name}
+                        width={200}
+                        height={200}
                         className="max-h-full max-w-full object-contain"
                       />
                     </div>

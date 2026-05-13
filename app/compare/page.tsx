@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -88,11 +89,7 @@ export default function CompareSuppliers() {
                       <th key={supplier.id} className="p-3 border-b bg-gray-50">
                         <div className="flex flex-col items-center">
                           <div className="h-24 w-24 bg-gray-100 rounded-md mb-2 flex items-center justify-center overflow-hidden">
-                            <img
-                              src={supplier.imageUrl || "/placeholder.svg"}
-                              alt={supplier.name}
-                              className="max-h-full max-w-full object-contain"
-                            />
+                            <Image src={supplier.imageUrl || "/placeholder.svg"} alt={supplier.name} width={200} height={200} className="max-h-full max-w-full object-contain" />
                           </div>
                           <div className="text-center">
                             <div className="font-medium">{supplier.name}</div>

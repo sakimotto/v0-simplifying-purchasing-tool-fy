@@ -1,4 +1,5 @@
 import { ArrowLeft, Building, FileText, Mail, MapPin, Phone, Plus, ShoppingCart } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -121,11 +122,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                 <CardContent>
                   <div className="flex flex-col items-center mb-6">
                     <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                      <img
-                        src={supplier.logo || "/placeholder.svg"}
-                        alt={supplier.name}
-                        className="w-20 h-20 rounded-full object-cover"
-                      />
+                      <Image src={supplier.logo || "/placeholder.svg"} alt={supplier.name} width={200} height={200} className="w-20 h-20 rounded-full object-cover" />
                     </div>
                     <h2 className="text-xl font-bold">{supplier.name}</h2>
                     <Badge className="mt-2">{supplier.category}</Badge>

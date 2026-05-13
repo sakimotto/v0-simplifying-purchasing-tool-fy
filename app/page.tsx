@@ -1,4 +1,5 @@
 import { Search, Filter, Phone, Mail, Globe, MapPin, Download, Star, StarHalf, Plus } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -103,11 +104,7 @@ function SupplierCard({ supplier }: { supplier: any }) {
   return (
     <Card className="overflow-hidden h-full">
       <div className="relative h-40 bg-gray-100 flex items-center justify-center p-4 border-b">
-        <img
-          src={supplier.imageUrl || "/placeholder.svg"}
-          alt={supplier.name}
-          className="max-h-full max-w-full object-contain"
-        />
+        <Image src={supplier.imageUrl || "/placeholder.svg"} alt={supplier.name} width={200} height={200} className="max-h-full max-w-full object-contain" />
         <button className="absolute top-2 right-2 text-gray-400 hover:text-yellow-400">
           <Star className="h-5 w-5" />
         </button>

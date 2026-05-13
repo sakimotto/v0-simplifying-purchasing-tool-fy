@@ -1,4 +1,5 @@
 import { ArrowLeft, Save } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -192,7 +193,7 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   <p className="text-sm text-gray-500 mb-1">Current image displayed below</p>
                   <div className="w-32 h-32 bg-gray-100 rounded mx-auto mt-4 flex items-center justify-center">
-                    <img src="/placeholder.svg" alt="Item" className="max-h-full max-w-full object-contain" />
+                    <Image src="/placeholder.svg" alt="Item" width={200} height={200} className="max-h-full max-w-full object-contain" />
                   </div>
                   <Button variant="outline" size="sm" className="mt-4">
                     Replace Image

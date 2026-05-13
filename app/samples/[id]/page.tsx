@@ -1,4 +1,5 @@
 import { ArrowLeft, Download, Edit } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -64,11 +65,7 @@ export default function SampleDetailPage({ params }: { params: { id: string } })
           <div className="md:col-span-1">
             <Card>
               <div className="p-6 flex items-center justify-center bg-white border-b">
-                <img
-                  src={sample.imageUrl || "/placeholder.svg"}
-                  alt={sample.product}
-                  className="max-h-[300px] max-w-full object-contain"
-                />
+                <Image src={sample.imageUrl || "/placeholder.svg"} alt={sample.product} width={200} height={200} className="max-h-[300px] max-w-full object-contain" />
               </div>
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
@@ -141,11 +138,7 @@ export default function SampleDetailPage({ params }: { params: { id: string } })
                   <CardContent>
                     <div className="flex items-center gap-4">
                       <div className="h-16 w-16 rounded bg-gray-100 flex items-center justify-center">
-                        <img
-                          src={sample.imageUrl || "/placeholder.svg"}
-                          alt={sample.product}
-                          className="max-h-full max-w-full object-contain"
-                        />
+                        <Image src={sample.imageUrl || "/placeholder.svg"} alt={sample.product} width={200} height={200} className="max-h-full max-w-full object-contain" />
                       </div>
                       <div>
                         <h3 className="font-medium">{sample.product}</h3>
