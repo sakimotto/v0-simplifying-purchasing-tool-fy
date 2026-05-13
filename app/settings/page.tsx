@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 
@@ -100,37 +101,19 @@ export default function SettingsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="name">Name</Label>
-                        <input
-                          id="name"
-                          className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          defaultValue="John Doe"
-                        />
+                        <Input id="name" defaultValue="John Doe" />
                       </div>
                       <div>
                         <Label htmlFor="email">Email</Label>
-                        <input
-                          id="email"
-                          type="email"
-                          className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          defaultValue="john.doe@example.com"
-                        />
+                        <Input id="email" type="email" defaultValue="john.doe@example.com" />
                       </div>
                       <div>
                         <Label htmlFor="role">Role</Label>
-                        <input
-                          id="role"
-                          className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          defaultValue="Purchasing Manager"
-                          readOnly
-                        />
+                        <Input id="role" defaultValue="Purchasing Manager"readOnly />
                       </div>
                       <div>
                         <Label htmlFor="department">Department</Label>
-                        <input
-                          id="department"
-                          className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          defaultValue="Procurement"
-                        />
+                        <Input id="department" defaultValue="Procurement" />
                       </div>
                     </div>
                     <div className="flex justify-end">
@@ -193,27 +176,15 @@ export default function SettingsPage() {
                       <div className="space-y-2">
                         <div>
                           <Label htmlFor="current-password">Current Password</Label>
-                          <input
-                            id="current-password"
-                            type="password"
-                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          />
+                          <Input id="current-password" type="password" />
                         </div>
                         <div>
                           <Label htmlFor="new-password">New Password</Label>
-                          <input
-                            id="new-password"
-                            type="password"
-                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          />
+                          <Input id="new-password" type="password" />
                         </div>
                         <div>
                           <Label htmlFor="confirm-password">Confirm New Password</Label>
-                          <input
-                            id="confirm-password"
-                            type="password"
-                            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                          />
+                          <Input id="confirm-password" type="password" />
                         </div>
                       </div>
                       <Button className="mt-4">Update Password</Button>
