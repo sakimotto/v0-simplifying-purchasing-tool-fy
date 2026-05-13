@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String   @default("buyer") // admin, manager, buyer, viewer
+  department String?
+  status    String   @default("active") // active, inactive
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  samples    Sample[]
+  rfqs       RFQ[]
+}
+
+model Supplier {
+  id              String   @id @default(cuid())
+  name            String
+  category        String?
+  specialization  String?
+  location        String?
+  address         String?
+  phone           String?
+  email           String?
+  website         String?
+  contactPerson   String?
+  rating          Float    @default(0)
+  status          String   @default("active") // active, pending, inactive
+  verified        Boolean  @default(false)
+  minOrderQty     Int?
+  leadTime        String?
+  paymentTerms    String?
+  samplingPolicy  String?
+  certifications  String?  // JSON array stored as string
+  notes           String?
+  imageUrl        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items    Item[]
+  orders   Order[]
+  rfqs     RFQ[]
+  samples  Sample[]
+}
+
+model Item {
+  id            String   @id @default(cuid())
+  sku           String   @unique
+  customerSku   String?
+  name          String
+  category      String?
+  subcategory   String?
+  description   String?
+  unitPrice     Float    @default(0)
+  currency      String   @default("USD")
+  stock         Int      @default(0)
+  reorderPoint  Int      @default(0)
+  moq           Int?
+  leadTime      String?
+  status        String   @default("active") // active, inactive, low_stock
+  width         String?
+  height        String?
+  depth         String?
+  techSpecs     String?
+  qualityStandards String?
+  imageUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  supplierId    String?
+  supplier      Supplier? @relation(fields: [supplierId], references: [id])
+
+  orderItems    OrderItem[]
+  rfqItems      RFQItem[]
+  samples       Sample[]
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique
+  supplierId      String
+  supplier        Supplier @relation(fields: [supplierId], references: [id])
+  orderDate       DateTime @default(now())
+  deliveryDate    DateTime?
+  status          String   @default("pending") // pending, processing, shipped, delivered, cancelled
+  paymentStatus   String   @default("unpaid") // unpaid, deposit_paid, paid
+  paymentTerms    String?
+  shippingMethod  String?
+  shippingAddress String?
+  trackingNumber  String?
+  notes           String?
+  total           Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  itemId    String
+  item      Item    @relation(fields: [itemId], references: [id])
+  quantity  Int     @default(0)
+  unitPrice Float   @default(0)
+  total     Float   @default(0)
+}
+
+model RFQ {
+  id              String   @id @default(cuid())
+  rfqNumber       String   @unique
+  supplierId      String
+  supplier        Supplier @relation(fields: [supplierId], references: [id])
+  requestedById   String?
+  requestedBy     User?    @relation(fields: [requestedById], references: [id])
+  requestDate     DateTime @default(now())
+  dueDate         DateTime?
+  status          String   @default("pending") // pending, completed, expired, rejected
+  responseDate    DateTime?
+  quotedPrice     Float?
+  quotedLeadTime  String?
+  paymentTerms    String?
+  shippingTerms   String?
+  comments        String?
+  certifications  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items           RFQItem[]
+}
+
+model RFQItem {
+  id          String @id @default(cuid())
+  rfqId       String
+  rfq         RFQ    @relation(fields: [rfqId], references: [id])
+  itemId      String
+  item        Item   @relation(fields: [itemId], references: [id])
+  quantity    Int    @default(0)
+}
+
+model Sample {
+  id              String   @id @default(cuid())
+  sampleNumber    String   @unique
+  itemId          String
+  item            Item     @relation(fields: [itemId], references: [id])
+  supplierId      String
+  supplier        Supplier @relation(fields: [supplierId], references: [id])
+  requestedById   String?
+  requestedBy     User?    @relation(fields: [requestedById], references: [id])
+  requestDate     DateTime @default(now())
+  requiredByDate  DateTime?
+  status          String   @default("requested") // requested, in_transit, received, approved, rejected
+  receivedDate    DateTime?
+  evaluationDate  DateTime?
+  quantity        Int      @default(1)
+  variations      String?
+  comments        String?
+  evaluationNotes String?
+  qualityRating   Int?
+  colorRating     Int?
+  workmanshipRating Int?
+  imageUrl        String?
+  shippingAddress String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // contract, invoice, spec, certificate, report
+  size        String?
+  url         String?
+  supplierId  String?
+  orderId     String?
+  uploadedBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
