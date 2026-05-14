@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
 
   const order = await prisma.order.create({
     data: {
+      orderNumber: `ORD-${Date.now()}`,
       supplierId: rfq.supplierId,
       status: "pending",
       paymentStatus: "unpaid",

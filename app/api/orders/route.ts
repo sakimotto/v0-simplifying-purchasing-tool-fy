@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
   const order = await prisma.order.create({
     data: {
       ...orderData,
+      orderNumber: orderData.orderNumber || `ORD-${Date.now()}`,
       items: { create: items },
     },
     include: { supplier: true, items: { include: { item: true } } },
